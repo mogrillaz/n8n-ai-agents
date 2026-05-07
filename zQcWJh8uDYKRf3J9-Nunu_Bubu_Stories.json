@@ -1,0 +1,1198 @@
+{
+  "name": "Nunu & Bubu Stories",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "# ✅ STEP 1 — Generate Script & Prompt with AI",
+        "height": 500,
+        "width": 1968
+      },
+      "id": "f984b13f-973f-46f9-b2ed-d60f41e96725",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -400,
+        240
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# ✅ Video erstellen mit veo3",
+        "height": 504,
+        "width": 864,
+        "color": 3
+      },
+      "id": "dd3eed35-015d-4b9f-999e-d0160e70d277",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -400,
+        752
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"instagram_id\": \"1111\",\n  \"youtube_id\": \"1111\",\n  \"threads_id\": \"1111\",\n  \"tiktok_id\": \"1111\",\n  \"facebook_id\": \"1111\",\n  \"facebook_page_id\": \"1111\",\n  \"twitter_id\": \"1111\",\n  \"linkedin_id\": \"1111\",\n  \"pinterest_id\": \"1111\",\n  \"pinterest_board_id\": \"1111\",\n  \"bluesky_id\": \"1111\"\n}\n",
+        "options": {}
+      },
+      "id": "38ebc48a-8ce3-493d-8d0c-fcadf13b457f",
+      "name": "Assign Social Media IDs",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        672,
+        864
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1f6zClH6ndN_LeF7HrxbNMc8X2qEobEcDPzLnDeOzBEQ",
+          "mode": "list",
+          "cachedResultName": "New stories Bunu",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1f6zClH6ndN_LeF7HrxbNMc8X2qEobEcDPzLnDeOzBEQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 246128521,
+          "mode": "list",
+          "cachedResultName": "nunu_bubu_400_stories_refined_unique (1)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1f6zClH6ndN_LeF7HrxbNMc8X2qEobEcDPzLnDeOzBEQ/edit#gid=246128521"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "uploadlink",
+              "lookupValue": "={{ $json.uploadlink }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "337cd3c2-e5ae-45d4-8143-e8743630bb50",
+      "name": "Get my video",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        512,
+        864
+      ],
+      "typeVersion": 4.5,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "hd726WkkaKedDjeP",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# ✅ STEP 3 — Publish Video to Social Media\n",
+        "height": 504,
+        "width": 1088,
+        "color": 4
+      },
+      "id": "ab4c59ee-c04c-4273-9475-dca2b528dfb2",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        480,
+        752
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('AI Agent: Generate Video Concept1').item.json.output.story }}{{ $('AI Agent: Generate Video Concept1').item.json.output.visual_direction.look }}{{ $('AI Agent: Generate Video Concept1').item.json.output.visual_direction.lighting }}{{ $('AI Agent: Generate Video Concept1').item.json.output.visual_direction.materials }}{{ $('AI Agent: Generate Video Concept1').item.json.output.visual_direction.environment }}{{ $('AI Agent: Generate Video Concept1').item.json.output.visual_direction.animation_cues }}\n\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Du bist ein kreativer 3D-Animations- und Storytelling-Experte.\n\nErstelle aus den folgenden Input-Daten eine komplette, herzerwärmende Kurzgeschichte\nüber Bubu (eine süße Affenfrau) und Nunu (ein süßer Bärmann, gleiches Alter wie Bubu),\nbasierend auf dem Plot und der Umgebung.\n\nINPUT:\nTitel: {{ $('AI Agent: Generate Video Concept1').item.json.output.title }}\nStory: {{ $('AI Agent: Generate Video Concept1').item.json.output.story }}\nUmgebung: {{ $('AI Agent: Generate Video Concept1').item.json.output.visual_direction }}\n\nDEINE AUFGABE:\n1. Schreibe eine detailreiche Story (in Deutsch, 3D-Animationsfilm-Stil).\n2. Füge eine vollständige visuelle Regieanweisung hinzu (look, lighting, camera, materials, environment, animation_cues).\n3. Erstelle eine Shot-List (max. 5 Shots, mit Beschreibung und Dauer in Sekunden).\n4. Erstelle passende Social-Media-Texte.\n\nAntworte ausschließlich im JSON-Format:\n\n{\n  \"story_output\": {\n    \"title\": \"<Titel der Szene>\",\n    \"story\": \"<Voller Story-Text>\",\n    \"visual_direction\": {\n      \"look\": \"...\",\n      \"lighting\": \"...\",\n      \"camera\": \"...\",\n      \"materials\": \"...\",\n      \"environment\": \"...\",\n      \"animation_cues\": [\"...\", \"...\"]\n    },\n    \"shot_list\": [\n      { \"shot\": 1, \"desc\": \"...\", \"duration_sec\": 4 },\n      { \"shot\": 2, \"desc\": \"...\", \"duration_sec\": 5 }\n    ]\n  },\n  \"social_media\": {\n    \"tiktokText\": \"...\",\n    \"youtubeTitle\": \"...\",\n    \"youtubeDescription\": \"...\",\n    \"hashtags\": [\"...\", \"...\", \"#AIgenerated\"]\n  }\n}\n"
+        }
+      },
+      "id": "4d9e9fb7-df00-4d02-8d5c-f63b1fbf2e61",
+      "name": "AI Agent: Create Veo3-Compatible Prompt",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        1248,
+        320
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {},
+      "id": "ad1a6374-165a-45e7-87bb-a38469ffb3a2",
+      "name": "Tool: Build Prompt Structure",
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "position": [
+        1344,
+        592
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.veo3api.ai/api/v1/veo/generate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={\n  \"prompt\": {{ JSON.stringify([\n    $node[\"AI Agent: Generate Video Concept1\"].json.output.story,\n    'LOOK: ' + $node[\"AI Agent: Generate Video Concept1\"].json.output.visual_direction.look,\n    'LIGHTING: ' + $node[\"AI Agent: Generate Video Concept1\"].json.output.visual_direction.lighting,\n    'CAMERA: ' + $node[\"AI Agent: Generate Video Concept1\"].json.output.visual_direction.camera,\n    'MATERIALS: ' + $node[\"AI Agent: Generate Video Concept1\"].json.output.visual_direction.materials,\n    'ENVIRONMENT: ' + $node[\"AI Agent: Generate Video Concept1\"].json.output.visual_direction.environment,\n    'ANIMATION CUES: ' + (($node[\"AI Agent: Generate Video Concept1\"].json.output.animation_cues || []).join(', '))\n  ].filter(Boolean).join('\\n')) }},\n  \"imageUrls\": [\n    \"https://drive.google.com/uc?export=download&id=1ipklMOzg6TZEVLlPSDVvH6Yc_B2metcX\"\n  ],\n  \"model\": \"veo3_fast\",\n  \"aspectRatio\": \"9:16\",\n  \"enableFallback\": false\n}\n",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 2000
+            }
+          }
+        }
+      },
+      "id": "b55cdea8-f4d9-4e4b-b7c0-2c0f7eb85e72",
+      "name": "Call Veo3 API to Generate Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -160,
+        864
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "o0U7zGpYQrxAzRWY",
+          "name": "Bearer Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 8,
+        "unit": "minutes"
+      },
+      "id": "bea781a3-4199-435c-a2d0-74c22d282209",
+      "name": "Wait for Veo3 Processing (5 mins)",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        0,
+        864
+      ],
+      "webhookId": "969e8518-c2a4-42b9-bf5b-8d366f2525b1",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "url": "=https://api.veo3api.ai/api/v1/veo/record-info",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "taskId",
+              "value": "={{ $json.data.taskId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "253193ee-e6b0-4d5c-bd75-ca670291b6c5",
+      "name": "Retrieve Final Video URL from Veo3",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        176,
+        784
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "o0U7zGpYQrxAzRWY",
+          "name": "Bearer Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1f6zClH6ndN_LeF7HrxbNMc8X2qEobEcDPzLnDeOzBEQ",
+          "mode": "list",
+          "cachedResultName": "New stories Bunu",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1f6zClH6ndN_LeF7HrxbNMc8X2qEobEcDPzLnDeOzBEQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 246128521,
+          "mode": "list",
+          "cachedResultName": "nunu_bubu_400_stories_refined_unique (1)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1f6zClH6ndN_LeF7HrxbNMc8X2qEobEcDPzLnDeOzBEQ/edit#gid=246128521"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "uploadlink": "={{ $json.data.response.resultUrls[0] }}",
+            "row_number": "={{ $('Code2').item.json.row_number }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Kategorie",
+              "displayName": "Kategorie",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Titel",
+              "displayName": "Titel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Beschreibung",
+              "displayName": "Beschreibung",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Fantasiesprache",
+              "displayName": "Fantasiesprache",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Environment",
+              "displayName": "Environment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tags",
+              "displayName": "Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "uploadlink",
+              "displayName": "uploadlink",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "c688aa83-555e-422d-b5de-a33c14d0ad04",
+      "name": "Google Sheets: Log Final Video Output",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        352,
+        864
+      ],
+      "typeVersion": 4.5,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "hd726WkkaKedDjeP",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1E6poWUvzUtD-o5o1mgokU6gOrNzLZbl3Na2TbNcY8_8",
+          "mode": "list",
+          "cachedResultName": "Daily TikTok Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E6poWUvzUtD-o5o1mgokU6gOrNzLZbl3Na2TbNcY8_8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Tabellenblatt1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1E6poWUvzUtD-o5o1mgokU6gOrNzLZbl3Na2TbNcY8_8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": 0,
+            "id": "={{ $('Get my video').item.json.row_number }}",
+            "status": "Veröffentlicht"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "idea",
+              "displayName": "idea",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "caption",
+              "displayName": "caption",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "production",
+              "displayName": "production",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "environment_prompt",
+              "displayName": "environment_prompt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "veo3_prompt",
+              "displayName": "veo3_prompt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "upload_link",
+              "displayName": "upload_link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cost",
+              "displayName": "cost",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "75a39472-ab63-4731-8df8-c3f3160be82a",
+      "name": "Update row in sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        848,
+        1040
+      ],
+      "typeVersion": 4.5,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "hd726WkkaKedDjeP",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-3.5-sonnet",
+        "options": {
+          "maxTokens": 2500
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        592
+      ],
+      "id": "36e6406e-002a-4066-ac1a-3de9299e3254",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "MBh9NH03OkA19txB",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-3.5-sonnet",
+        "options": {
+          "maxTokens": 500
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        896,
+        592
+      ],
+      "id": "09dd5672-5808-4bf9-8140-946606674f39",
+      "name": "OpenRouter Chat Model2",
+      "credentials": {
+        "openRouterApi": {
+          "id": "MBh9NH03OkA19txB",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"prompt\": \"Deine komplette Promptbeschreibung hier als ein String\",\n  \"aspect_ratio\": \"9:16\",\n  \"duration\": 60\n}\n"
+      },
+      "id": "ad96665e-a48d-4d4e-bacc-0a79101110d7",
+      "name": "Parser: Extract JSON from Idea1",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "position": [
+        1456,
+        576
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {},
+      "id": "4136a975-9416-4a27-91d8-74415e9988e0",
+      "name": "Wait for veo3 propmpt",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        -336,
+        864
+      ],
+      "webhookId": "7a8f0264-c29b-4abd-ad61-713f5d2f7c73",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "resource": "media",
+        "useBinaryData": true
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        992,
+        864
+      ],
+      "id": "54797336-4a5d-44a2-afbe-c29406d08083",
+      "name": "Upload media",
+      "credentials": {
+        "blotatoApi": {
+          "id": "z7s2vIPJEZA4UASu",
+          "name": "Blotato account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Google Sheets: Log Final Video Output').item.json.uploadlink }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          },
+          "timeout": 10000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        848,
+        864
+      ],
+      "id": "ed01d0b0-60bf-4954-8a0f-fe1c049bcac8",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "platform": "tiktok",
+        "accountId": {
+          "__rl": true,
+          "value": "11959",
+          "mode": "list",
+          "cachedResultName": "contenzz",
+          "cachedResultUrl": "https://backend.blotato.com/v2/accounts/11959"
+        },
+        "postContentText": "={{ $('AI Agent: Generate Video Concept2').item.json.output.tiktokText }}{{ $('AI Agent: Generate Video Concept2').item.json.output.hashtags }}",
+        "postContentMediaUrls": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        1296,
+        816
+      ],
+      "id": "8cd6055d-e6bd-46f9-837b-070ae051b4cb",
+      "name": "Create Tiktok post",
+      "credentials": {
+        "blotatoApi": {
+          "id": "z7s2vIPJEZA4UASu",
+          "name": "Blotato account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "platform": "youtube",
+        "accountId": {
+          "__rl": true,
+          "value": "9229",
+          "mode": "list",
+          "cachedResultName": "dudububu bubududu (Nunu&Bubu)",
+          "cachedResultUrl": "https://backend.blotato.com/v2/accounts/9229"
+        },
+        "postContentText": "={{ $('Code2').item.json.Beschreibung }}",
+        "postContentMediaUrls": "={{ $json.url }}",
+        "postCreateYoutubeOptionTitle": "={{ $('AI Agent: Generate Video Concept1').item.json.output.title }}",
+        "options": {}
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        1296,
+        1008
+      ],
+      "id": "9fc1b60f-0b39-491f-bcc0-9e09fec3e727",
+      "name": "Create Youtube post",
+      "credentials": {
+        "blotatoApi": {
+          "id": "z7s2vIPJEZA4UASu",
+          "name": "Blotato account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 19
+            }
+          ]
+        }
+      },
+      "id": "c22f39cf-6db1-4047-bfde-7db51d9a2ab7",
+      "name": "Trigger: Run Daily Script Generator1",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        -352,
+        320
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Szenendaten:\nKategorie: {{$json[\"Kategorie\"]}}\nTitel: {{$json[\"Titel\"]}}\nBeschreibung: {{$json[\"Beschreibung\"]}}\nFantasiesprache: {{$json[\"Fantasiesprache\"]}}\nUmgebung: {{$json[\"Environment\"]}}\nTags: {{$json[\"Tags\"]}}\n\nSchreibe auf Basis dieser Daten eine herzerwärmende Kurzgeschichte (2–3 Absätze) \nmit Nunu (Bär, männlich) und Bubu (Affe, weiblich) – beide gleich alt. \nNutze die Fantasiesprache dezent und beschreibe die Emotionen zusätzlich klar.\n\nGib anschließend verpflichtend aus:\n- „3D Visual Direction“ (Look/Lighting/Camera/Materials/Environment/Animation Cues)\n- „Shot List“ (2–4 Shots, je 2–6 Sek., Beschreibung + Dauer)\n- Bitte hintergrundmusik \n- immer {{$json[\"Fantasiesprache\"]}} sprechen\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Du bist ein 3D-Animations- und Storytelling-Experte.\nFiguren (fix): Bubu = weibliches Affenmädchen (zarte Wimpern); Nunu = männlicher Bärenjunge (plüschig). Gleiches Alter.\n\nAufgabe:\n- Erzeuge aus den Eingabedaten eine herzerwärmende Kurzgeschichte (filmisch, 2–3 Absätze).\n- Liefere präzise 3D-Regieanweisungen (Look, Lighting, Camera, Materials, Environment, Animation Cues).\n- Erstelle eine Shot-List (2–5 Shots mit Dauer in Sekunden).\n\nAUSGABEREGELN (sehr wichtig):\n- Antworte **ausschließlich** mit **einem** gültigen JSON-Objekt.\n- **Keine** Code-Fences, **kein** Text davor/danach, **keine** Kommentare.\n- Nur doppelte Anführungszeichen, **keine** trailing commas.\n\nZiel-Schema (Schlüssel exakt so, klein geschrieben):\n{\n  \"title\": string,\n  \"story\": string,\n  \"visual_direction\": {\n    \"look\": string,\n    \"lighting\": string,\n    \"camera\": string,\n    \"materials\": string,\n    \"environment\": string,\n    \"animation_cues\": string[]\n  },\n  \"shot_list\": [\n    { \"shot\": number, \"desc\": string, \"duration_sec\": number }\n  ]\n}\n"
+        }
+      },
+      "id": "77241668-bbf6-4e3c-9d24-7b0419e7787f",
+      "name": "AI Agent: Generate Video Concept1",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        560,
+        320
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-3.5-sonnet",
+        "options": {
+          "maxTokens": 2000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        464,
+        592
+      ],
+      "id": "59f4a105-1251-49e0-8c66-871d40c14185",
+      "name": "OpenRouter Chat Model3",
+      "credentials": {
+        "openRouterApi": {
+          "id": "MBh9NH03OkA19txB",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "6ea5ceac-6bb0-40e1-9748-c1c0d6af8c65",
+      "name": "Tool: Inject Creativity1",
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "position": [
+        560,
+        592
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"title\": \"Knopf abgerissen – im Garten\",\n  \"story\": \"Voller Story-Text...\",\n  \"visual_direction\": {\n    \"look\": \"soft toy-style\",\n    \"lighting\": \"warm key light\",\n    \"camera\": \"35mm, eye-level\",\n    \"materials\": \"Bubu: feines Fell, Nunu: plüschiger Fleece\",\n    \"environment\": \"Verschneiter Wintertag...\",\n    \"animation_cues\": [\"Bubu lächelt\", \"Nunu nickt\"]\n  },\n  \"shot_list\": [\n    { \"shot\": 1, \"desc\": \"Close-up von Bubu\", \"duration_sec\": 4 },\n    { \"shot\": 2, \"desc\": \"Wide Shot der Szene\", \"duration_sec\": 5 }\n  ]\n}\n"
+      },
+      "id": "0c5a2d36-613e-44dc-8a9c-36446137bbeb",
+      "name": "Parser: Extract JSON from Idea2",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "position": [
+        736,
+        608
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "jsCode": "return items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -48,
+        320
+      ],
+      "id": "4cdcaaa0-a2b2-464f-979c-1658ab9139c5",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {}\n}];\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        656,
+        608
+      ],
+      "id": "36e8646d-ce46-409d-b2b1-53fdce3bb23e",
+      "name": "Code Tool"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Holt alle Datensätze aus items\nconst data = items.map(item => item.json);\n\n// Wählt einen zufälligen Index\nconst randomIndex = Math.floor(Math.random() * data.length);\n\n// Holt den zufälligen Datensatz\nconst randomStory = data[randomIndex];\n\n// Gibt den Datensatz als JSON zurück\nreturn [{ json: randomStory }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        112,
+        320
+      ],
+      "id": "ffd17f3f-d750-4e2b-a0f7-b109a47c98bd",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Wir nehmen den ersten Input-Item (Google Sheet Row oder Code Node Output)\nconst row = items[0].json;\n\n// Kombiniere idea und caption zu einem Suchtext in Kleinbuchstaben\nconst text = `${row.idea || \"\"} ${row.caption || \"\"}`.toLowerCase();\n\n// Funktion: prüft auf bekannte Namen im Text\n\n\n// 1. Falls Protagonist schon gesetzt ist → übernehmen\n// 2. Falls nicht → aus Text erkennen\n// 3. Falls nicht erkannt → Fallback\n\n// Item mit neuem Protagonist zurückgeben\nreturn [{\n  json: {\n    ...row,\n    \n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        320
+      ],
+      "id": "4e867e5e-f5b4-4f5f-b027-0b886d6fa74a",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"story_output\": {\n    \"title\": \"<Titel der Szene>\",\n    \"story\": \"<Voller Story-Text>\",\n    \"visual_direction\": {\n      \"look\": \"...\",\n      \"lighting\": \"...\",\n      \"camera\": \"...\",\n      \"materials\": \"...\",\n      \"environment\": \"...\",\n      \"animation_cues\": [\"...\", \"...\"]\n    },\n    \"shot_list\": [\n      { \"shot\": 1, \"desc\": \"...\", \"duration_sec\": 4 },\n      { \"shot\": 2, \"desc\": \"...\", \"duration_sec\": 5 }\n    ]\n  },\n  \"social_media\": {\n    \"tiktokText\": \"...\",\n    \"youtubeTitle\": \"...\",\n    \"youtubeDescription\": \"...\",\n    \"hashtags\": [\"...\", \"...\", \"#AIgenerated\"]\n  }\n}\n"
+      },
+      "id": "c720f4d2-1950-43de-8a9c-97bda9a79278",
+      "name": "Parser: Extract JSON from Idea3",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "position": [
+        1040,
+        592
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.output }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Du bist ein kreativer 3D-Animations- und Storytelling-Experte.\n\nErstelle aus den folgenden Input-Daten eine komplette Kurzgeschichte\nüber Bubu (eine süße Affenfrau) und Nunu (ein süßer Bärmann, gleiches Alter wie Bubu).\nNutze dabei den beschriebenen Plot, um eine charmante und lebendige Szene zu erschaffen.\nBeschreibe alles in einem 3D-Animationsstil, so dass es für eine visuelle Umsetzung\nleicht umsetzbar ist.\n\nINPUT:\n{{ $json.output }}\n\nDEINE AUFGABE:\n1. Schreibe eine detailreiche, herzerwärmende Story auf Basis der Input-Daten.\n2. Ergänze eine visuelle Regieanweisung für die 3D-Umsetzung (Look, Licht, Kamera, Materialien, Umgebung, Animation-Cues).\n3. Erstelle eine Shot-List mit Szenenbeschreibung und Dauer in Sekunden.\n\nAntworte ausschließlich im JSON-Format:\n\n{\n  \"title\": \"<Titel der Szene>\",\n  \"story\": \"<Voller Story-Text>\",\n  \"visual_direction\": {\n    \"look\": \"...\",\n    \"lighting\": \"...\",\n    \"camera\": \"...\",\n    \"materials\": \"...\",\n    \"environment\": \"...\",\n    \"animation_cues\": [\"...\", \"...\"]\n  },\n  \"shot_list\": [\n    { \"shot\": 1, \"desc\": \"...\", \"duration_sec\": 4 },\n    { \"shot\": 2, \"desc\": \"...\", \"duration_sec\": 5 }\n  ]\n}\n\n{\n  \"tiktokText\": \"...\",\n  \"youtubeTitle\": \"...\",\n  \"youtubeDescription\": \"...\",\n  \"hashtags\": [\"...\", \"...\", \"#AIgenerated\"]\n}\n"
+        }
+      },
+      "id": "9e6ac541-c120-4b19-88a5-acfbc5663159",
+      "name": "AI Agent: Generate Video Concept2",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        896,
+        320
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1680,
+        1008
+      ],
+      "typeVersion": 1,
+      "id": "9eba69c3-1c17-45e6-b59f-3c00d2480c70",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1f6zClH6ndN_LeF7HrxbNMc8X2qEobEcDPzLnDeOzBEQ",
+          "mode": "list",
+          "cachedResultName": "New stories Bunu",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1f6zClH6ndN_LeF7HrxbNMc8X2qEobEcDPzLnDeOzBEQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 246128521,
+          "mode": "list",
+          "cachedResultName": "nunu_bubu_400_stories_refined_unique (1)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1f6zClH6ndN_LeF7HrxbNMc8X2qEobEcDPzLnDeOzBEQ/edit#gid=246128521"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -176,
+        320
+      ],
+      "id": "f2a8a4eb-3fde-418e-8f97-c3f26b752372",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "hd726WkkaKedDjeP",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Get my video": {
+      "main": [
+        [
+          {
+            "node": "Assign Social Media IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign Social Media IDs": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Build Prompt Structure": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent: Create Veo3-Compatible Prompt",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Veo3 API to Generate Video": {
+      "main": [
+        [
+          {
+            "node": "Wait for Veo3 Processing (5 mins)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Veo3 Processing (5 mins)": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Final Video URL from Veo3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Final Video URL from Veo3": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets: Log Final Video Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets: Log Final Video Output": {
+      "main": [
+        [
+          {
+            "node": "Get my video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent: Create Veo3-Compatible Prompt": {
+      "main": [
+        [
+          {
+            "node": "Wait for veo3 propmpt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent: Create Veo3-Compatible Prompt",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent: Generate Video Concept2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser: Extract JSON from Idea1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent: Create Veo3-Compatible Prompt",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for veo3 propmpt": {
+      "main": [
+        [
+          {
+            "node": "Call Veo3 API to Generate Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Upload media",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload media": {
+      "main": [
+        [
+          {
+            "node": "Create Youtube post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Youtube post": {
+      "main": [
+        []
+      ]
+    },
+    "Trigger: Run Daily Script Generator1": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent: Generate Video Concept1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser: Extract JSON from Idea2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent: Generate Video Concept1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Inject Creativity1": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "AI Agent: Generate Video Concept1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent: Generate Video Concept2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent: Generate Video Concept1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent: Generate Video Concept1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser: Extract JSON from Idea3": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent: Generate Video Concept2",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent: Generate Video Concept2": {
+      "main": [
+        [
+          {
+            "node": "Wait for veo3 propmpt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Trigger: Run Daily Script Generator": {
+      "recurrenceRules": []
+    },
+    "node:Trigger: Run Daily Script Generator1": {
+      "recurrenceRules": []
+    }
+  },
+  "pinData": {
+    "Trigger: Run Daily Script Generator1": [
+      {
+        "json": {
+          "timestamp": "2025-08-10T19:00:38.010+02:00",
+          "Readable date": "August 10th 2025, 7:00:38 pm",
+          "Readable time": "7:00:38 pm",
+          "Day of week": "Sunday",
+          "Year": "2025",
+          "Month": "August",
+          "Day of month": "10",
+          "Hour": "19",
+          "Minute": "00",
+          "Second": "38",
+          "Timezone": "Europe/Berlin (UTC+02:00)"
+        }
+      }
+    ]
+  },
+  "triggerCount": 1,
+  "meta": {
+    "templateId": "5035",
+    "templateCredsSetupCompleted": true
+  }
+}
