@@ -1,0 +1,180 @@
+{
+  "name": "Retry worker",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const attempt = ($json.attempt || 0) + 1;\n\n// backoff_seconds kommt jetzt direkt aus $json\nconst delays = $json.backoff_seconds;  \n\n// falls es ein String wäre → absichern\nconst arr = Array.isArray(delays) ? delays : String(delays).split(',').map(x => Number(x.trim()));\n\nconst retry_in_s = arr[Math.min(attempt-1, arr.length-1)];\nconst next_retry_at = new Date(Date.now() + retry_in_s*1000).toISOString();\n\nreturn {\n  json: {\n    ...$json,\n    attempt,\n    retry_in_s,\n    next_retry_at,\n    status: attempt >= $json.max_attempts ? 'give_up' : 'open'\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        816,
+        240
+      ],
+      "id": "ee7b9c29-4f90-40a3-90b7-8749295754b4",
+      "name": "Retry-Worker (Backoff)"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 12
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        368,
+        240
+      ],
+      "id": "d5aa4067-0452-4df2-962f-19ed958e7dd1",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1yMDLbXMD_MwQ3hnTJoG_YtmhB68cOj7WsP2el5fUg04",
+          "mode": "list",
+          "cachedResultName": "Zyklopen Story",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yMDLbXMD_MwQ3hnTJoG_YtmhB68cOj7WsP2el5fUg04/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1478951142,
+          "mode": "list",
+          "cachedResultName": "error_config",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yMDLbXMD_MwQ3hnTJoG_YtmhB68cOj7WsP2el5fUg04/edit#gid=1478951142"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        512,
+        240
+      ],
+      "id": "0f33837e-38a2-4352-9a9f-42b62fdd89d8",
+      "name": "Read row from error_config",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "hd726WkkaKedDjeP",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const cfg = items[0].json;\ncfg.backoff_seconds = cfg.backoff_seconds.split(',').map(x => Number(x.trim()));\ncfg.max_attempts = Number(cfg.max_attempts);\ncfg.error_threshold = Number(cfg.error_threshold);\nreturn [{ json: cfg }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        240
+      ],
+      "id": "baf94448-bc4c-43b8-b20d-d6e7f3a0efa7",
+      "name": "Map Config"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1yMDLbXMD_MwQ3hnTJoG_YtmhB68cOj7WsP2el5fUg04",
+          "mode": "list",
+          "cachedResultName": "Zyklopen Story",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yMDLbXMD_MwQ3hnTJoG_YtmhB68cOj7WsP2el5fUg04/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1827454940,
+          "mode": "list",
+          "cachedResultName": "Error",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yMDLbXMD_MwQ3hnTJoG_YtmhB68cOj7WsP2el5fUg04/edit#gid=1827454940"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "status",
+              "lookupValue": "open"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        992,
+        240
+      ],
+      "id": "eea813d8-1536-4768-a052-13c67091535f",
+      "name": "Read row from error",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "retryOnFail": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "hd726WkkaKedDjeP",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read row from error_config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read row from error_config": {
+      "main": [
+        [
+          {
+            "node": "Map Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Map Config": {
+      "main": [
+        [
+          {
+            "node": "Retry-Worker (Backoff)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retry-Worker (Backoff)": {
+      "main": [
+        [
+          {
+            "node": "Read row from error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": null
+}
